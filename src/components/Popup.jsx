@@ -7,7 +7,6 @@ const styles = {
     padding: '20px',
     backgroundColor: '#ffffff',
     borderRadius: '12px',
-    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.15)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -99,7 +98,12 @@ const Popup = () => {
               'div[class*="pop-up"]',
               'aside',
               'object',
-              'embed[src*="ads"]'
+              'embed[src*="ads"]',
+              'footer',                         // footer 태그 전체를 숨김
+              'div[class*="footer-ad"]',        // 클래스 이름에 'footer-ad'가 포함된 div
+              'div[id*="footer-ad"]',           // ID 이름에 'footer-ad'가 포함된 div
+              'section[class*="footer-ad"]',    // 클래스 이름에 'footer-ad'가 포함된 section
+              'div[class*="bottom-banner"]'     // 하단 배너 광고
             ];
   
             const popupSelectors = [
@@ -240,11 +244,11 @@ const Popup = () => {
           onChange={(e) => handleFontSizeChange(e.target.value)}
         />
       </div>
-      <button
+      {/* <button
         style={styles.popupButton}
         onClick={toggleDarkMode}>
         {darkMode ? 'Disable Dark Mode' : 'Enable Dark Mode'}
-      </button>
+      </button> */}
     </div>
   );
 };
