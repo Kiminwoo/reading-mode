@@ -77,34 +77,72 @@ const Popup = () => {
   const handleReadingMode = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const activeTab = tabs[0];
-
+  
       if (activeTab.url.startsWith('chrome://')) {
         alert('This extension cannot be used on chrome:// pages.');
         return;
       }
-
+  
+      // Reading mode를 활성화하거나 비활성화하는 스크립트 주입
       if (!readingMode) {
+        // Reading Mode 활성화 - 광고 및 팝업 요소를 숨김
         chrome.scripting.executeScript({
           target: { tabId: activeTab.id },
-          files: ['content/contentScript.js']
+          func: () => {
+            const adSelectors = [
+              'iframe[src*="ads"]',
+              'div[class*="ad"]',
+              'div[id*="ad"]',
+              'div[class*="banner"]',
+              'div[class*="sponsored"]',
+              'div[class*="promo"]',
+              'div[class*="pop-up"]',
+              'aside',
+              'object',
+              'embed[src*="ads"]'
+            ];
+  
+            const popupSelectors = [
+              'div[class*="popup"]',
+              'div[class*="modal"]',
+              'div[class*="overlay"]',
+              'div[id*="overlay"]',
+              'div[class*="notification"]'
+            ];
+  
+            // 광고와 팝업 요소 숨기기
+            const allSelectors = [...adSelectors, ...popupSelectors];
+            allSelectors.forEach((selector) => {
+              const elements = document.querySelectorAll(selector);
+              elements.forEach(el => {
+                el.style.display = 'none';  // 요소 숨기기
+                el.setAttribute('data-hidden-by-extension', 'true'); // 복구를 위해 속성 추가
+              });
+            });
+          }
         }).then(() => {
           console.log('Reading mode enabled.');
           setReadingMode(true);
         }).catch((error) => {
-          console.error('Error executing script:', error);
+          console.error('Error enabling reading mode:', error);
         });
       } else {
+        // Reading Mode 비활성화 - 숨겨진 요소 다시 표시
         chrome.scripting.executeScript({
           target: { tabId: activeTab.id },
           func: () => {
-            const elements = document.querySelectorAll('.reading-mode-style');
-            elements.forEach(el => el.classList.remove('reading-mode-style'));
+            // 숨겨진 광고와 팝업 요소 다시 표시
+            const hiddenElements = document.querySelectorAll('[data-hidden-by-extension="true"]');
+            hiddenElements.forEach(el => {
+              el.style.display = ''; // 원래의 display 상태로 복원
+              el.removeAttribute('data-hidden-by-extension'); // 임시 속성 제거
+            });
           }
         }).then(() => {
           console.log('Reading mode disabled.');
           setReadingMode(false);
         }).catch((error) => {
-          console.error('Error disabling script:', error);
+          console.error('Error disabling reading mode:', error);
         });
       }
     });
