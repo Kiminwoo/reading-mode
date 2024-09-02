@@ -24,9 +24,7 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: { // CSS 모듈 사용 설정
-                localIdentName: '[name]__[local]__[hash:base64:5]' // 클래스명 생성 규칙
-              }
+              modules: true,
             }
           }
         ]
