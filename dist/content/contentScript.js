@@ -1,0 +1,1 @@
+!function(){const e=document.querySelector(".main-content");e&&e.classList.add("reading-mode-style")}();
