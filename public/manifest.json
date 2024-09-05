@@ -5,7 +5,9 @@
   "description": "Enhance your reading experience by removing distractions.",
   "action": {
     "default_popup": "index.html",
-    "default_icon": "icon.png"
+    "default_icon": "icon.png",
+    "default_popup_container_height": "auto",
+    "default_popup_container_width": "auto"
   },
   "permissions": ["activeTab", "scripting"],
   "background": {

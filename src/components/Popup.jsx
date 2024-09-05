@@ -6,12 +6,11 @@ const styles = {
     width: '300px',
     padding: '20px',
     backgroundColor: '#ffffff',
-    borderRadius: '12px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     fontFamily: 'Arial, sans-serif',
-    border: '1px solid #ddd'
+    overflow: 'hidden'
   },
   popupTitle: {
     margin: '0 0 15px',
